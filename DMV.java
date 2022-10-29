@@ -73,11 +73,23 @@ public class DMV {
 
 
         //Create 20 Customer Threads
+        Customer[] customer_array = new Customer[20];
         for(int i=0; i<20; i++){
             Customer myCust = new Customer();
+            customer_array[i] = myCust;
             myCust.start();
         }
 
+        try{
+            for(int i=0; i<customer_array.length; i++){
+                customer_array[i].join();
+            }
+        }
+        catch(Exception e){
+            System.out.println("Exception: " + e);
+        }
+
+        System.out.println("Done");
         
         
     }
