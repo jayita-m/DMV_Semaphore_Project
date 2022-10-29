@@ -83,6 +83,7 @@ public class DMV {
         try{
             for(int i=0; i<customer_array.length; i++){
                 customer_array[i].join();
+                System.out.println("Customer " + customer_array[i].getNum() + " was joined");
             }
         }
         catch(Exception e){

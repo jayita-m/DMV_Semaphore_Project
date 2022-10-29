@@ -69,4 +69,8 @@ public class Customer extends Thread{
         DMV.agent_queue_occupied.release();
     }
 
+    public int getNum(){
+        return custnr;
+    }
+
 }
