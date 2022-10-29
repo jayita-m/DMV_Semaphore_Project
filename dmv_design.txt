@@ -1,0 +1,39 @@
+SEMAPHORES
+max_cap_of_info_desk_line = 20;
+mutex1 = 1;
+mutex2 = 1;
+count = 0;
+info_desk = 1;
+cust_ready_for_info_number = 0;
+
+CURR_INFO_DESK_NUM = -1;
+
+info_desk_queue = [];
+
+
+CUSTOMER ----------------------------------
+
+int custnr;
+wait(max_cap_of_info_desk_line)
+
+wait(mutex2)
+count++;
+custnr = count;
+//join_info_desk_line() 
+enqueue_info_desk(custnr)
+signal(mutex2)
+
+wait(info_desk)
+signal(cust_ready_for_info_number)
+signal(max_cap_of_info_desk_line)
+wait(cust_given_info_num)
+num = main.CURR_INFO_DESK_NUM();
+curr_cust = info_desk_queue.dequeue();
+Print("Cust" + curr_cust + "is given number: " + num);
+signal(info_desk)
+
+
+INFORMATION DESK --------------------------
+wait(cust_ready_for_info_number)
+CURR_INFO_DESK_NUM +=1;
+signal(cust_given_info_num)
