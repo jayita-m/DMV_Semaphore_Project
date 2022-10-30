@@ -1,10 +1,11 @@
 SEMAPHORES
-max_cap_of_info_desk_line = 20;
+max_cap_of_info_desk_line = 4;
 mutex1 = 1;
 mutex2 = 1;
 count = 0;
 info_desk = 1;
 cust_ready_for_info_number = 0;
+cust_given_info_num = 0;
 
 CURR_INFO_DESK_NUM = -1;
 
@@ -25,7 +26,7 @@ signal(mutex2)
 
 wait(info_desk)
 signal(cust_ready_for_info_number)
-signal(max_cap_of_info_desk_line)
+//signal(max_cap_of_info_desk_line)
 wait(cust_given_info_num)
 num = main.CURR_INFO_DESK_NUM();
 curr_cust = info_desk_queue.dequeue();
@@ -37,3 +38,5 @@ INFORMATION DESK --------------------------
 wait(cust_ready_for_info_number)
 CURR_INFO_DESK_NUM +=1;
 signal(cust_given_info_num)
+
+ANNOUNCER-----------------------------------

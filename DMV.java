@@ -2,22 +2,16 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 public class DMV {
-//     max_cap_of_info_desk_line = 20;
-// mutex1 = 1;
-// mutex2 = 1;
-// count = 0;
-// info_desk = 1;
-// cust_ready_for_info_number = 0;
 
-// CURR_INFO_DESK_NUM = -1;
-
-// info_desk_queue = [];
     public static int CURR_INFO_DESK_NUM = -1;
     public static int count = -1;
-    public static Semaphore max_cap_of_info_desk_line = new Semaphore(4, true);
+
+    public static Semaphore max_cap_of_info_desk_line = new Semaphore(20, true);
+    public static Semaphore max_cap_of_agent_line = new Semaphore(4, true);
     public static Semaphore mutex1 = new Semaphore(1, true);
     public static Semaphore mutex2 = new Semaphore(1, true);
     public static Semaphore mutex3 = new Semaphore(1, true);
+    public static Semaphore mutex4 = new Semaphore(1, true);
     public static Semaphore info_desk = new Semaphore(1, true);
     public static Semaphore cust_ready_for_info_number = new Semaphore(0, true);
     public static Semaphore cust_given_info_num = new Semaphore(0, true);
@@ -25,7 +19,7 @@ public class DMV {
     public static Semaphore announcer_call = new Semaphore(0, true);
     public static Semaphore agent_queue_occupied = new Semaphore(0, true);
 
-
+    public static Queue<Integer> GLOBAL_CUSTOMER = new LinkedList<>();
     public static Queue<Integer> info_desk_queue = new LinkedList<>(); //Maybe queue of Customer instead of integer?
     public static Queue<Integer> waiting_room_queue = new LinkedList<>();
     public static Queue<Integer> agent_queue = new LinkedList<>();
@@ -42,7 +36,6 @@ public class DMV {
 
     public static void main(String args[]){
 
-        //Semaphores - Global for now
         Arrays.fill(served, new Semaphore(0, true));
         Arrays.fill(agent_free, new Semaphore(1, true));
         Arrays.fill(ready_for_exam, new Semaphore(0, true));
@@ -52,25 +45,20 @@ public class DMV {
         
         //Create 1 Information Desk Thread
         InfoDesk myInfoDesk = new InfoDesk();
+        myInfoDesk.setDaemon(true);
         myInfoDesk.start();
 
         //Create 1 Announcer Thread
         Announcer myAnnouncer = new Announcer();
+        myAnnouncer.setDaemon(true);
         myAnnouncer.start();
 
         //Create 2 Agent Threads
-        // Agent myAgent0 = new Agent(0);
-        // Agent myAgent1 = new Agent(1);
-        // agent_list[0] = myAgent0;
-        // agent_list[1] = myAgent1;
-        // myAgent0.start();
-        // myAgent1.start();
-
         for(int i=0; i<2; i++){
             agent_list[i] = new Agent(i);
+            agent_list[i].setDaemon(true);
             agent_list[i].start();
         }
-
 
         //Create 20 Customer Threads
         Customer[] customer_array = new Customer[20];
@@ -81,17 +69,16 @@ public class DMV {
         }
 
         try{
-            for(int i=0; i<customer_array.length; i++){
+            for(int i=0; i<20; i++){
                 customer_array[i].join();
                 System.out.println("Customer " + customer_array[i].getNum() + " was joined");
             }
         }
         catch(Exception e){
-            System.out.println("Exception: " + e);
+            System.out.println("Exception in DMV.java: " + e);
         }
 
         System.out.println("Done");
-        
         
     }
 

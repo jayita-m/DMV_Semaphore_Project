@@ -17,12 +17,11 @@ public class Agent extends Thread{
                 // int customer_number = DMV.agent_queue.remove();
 
                 DMV.agent_free[agent_number].acquire();
-                //System.out.println("---- AGENT " + agent_number + " IS FREE ----");
-                // DMV.agent_queue_occupied.acquire();
-                // //DMV.mutex3.acquire();
-                // int customer_number = DMV.agent_queue.remove();
 
                 int customer_number = DMV.agent_queue.remove();
+                
+                DMV.max_cap_of_agent_line.release(); //new
+
                 System.out.println("Agent " + this.agent_number + " is serving customer " + customer_number);
                 //DMV.agent_customer_relationship.add(customer_number, agent_number);
                 DMV.agent_customer_relationship[customer_number] = agent_number;

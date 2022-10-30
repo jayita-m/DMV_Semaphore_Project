@@ -8,6 +8,8 @@ public class Customer extends Thread{
     public void run(){
         try{
             DMV.max_cap_of_info_desk_line.acquire();
+            
+            
             //DMV.mutex2.acquire();
             DMV.count++;
             //System.out.println("Count incremented, now: " + DMV.count);
@@ -42,6 +44,9 @@ public class Customer extends Thread{
             DMV.exam_done[custnr].release();
             DMV.license_given[custnr].acquire();
             System.out.println("Customer " + custnr + " gets license and departs");
+            // DMV.mutex4.acquire();
+            // DMV.GLOBAL_CUSTOMER.remove();
+            // DMV.mutex4.release();
             //DMV.agent_free[DMV.agent_customer_relationship[custnr]].release();
             
 
@@ -56,6 +61,7 @@ public class Customer extends Thread{
     public void enqueue_info_desk(int custnr){
         DMV.info_desk_queue.add(custnr);
         System.out.println("Customer " + custnr + " created, enters DMV");
+        // DMV.GLOBAL_CUSTOMER.add(custnr);
         //System.out.println("Queue: " + DMV.info_desk_queue);
     }
 
@@ -66,6 +72,7 @@ public class Customer extends Thread{
 
     public void enqueue_agent_line(int custnr){
         DMV.agent_queue.add(custnr);
+        System.out.println("Agent Queue: " + DMV.agent_queue);
         DMV.agent_queue_occupied.release();
     }
 

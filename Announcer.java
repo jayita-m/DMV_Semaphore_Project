@@ -11,6 +11,7 @@ public class Announcer extends Thread{
         while(true){
             try{
                 DMV.waiting_room_occupied.acquire();
+                DMV.max_cap_of_agent_line.acquire(); //new
                 System.out.println("Announcer calls number " + call_number);
                 call_number++;
                 DMV.announcer_call.release();
